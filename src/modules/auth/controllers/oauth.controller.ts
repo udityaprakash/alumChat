@@ -1,20 +1,19 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Post, Body } from '@nestjs/common';
-import { OAuthService } from '../services/oauth.service';
-import { GoogleSigninDto } from '../dtos/signin-via-google.dto';
+import { Controller, Post, Body, UnauthorizedException } from '@nestjs/common';
+import { AuthService } from '../services/oauth.service';
 
-@Controller('oauth/login')
-export class AuthenticationController {
-    constructor(private readonly oAuthService: OAuthService) {}
+@Controller('auth')
+export class AuthController {
+  constructor(private readonly authService: AuthService) {}
 
-    @Post('login')
-  async googleSignin(@Body() googleSigninDto: GoogleSigninDto) : {success:boolean, token: string} {
-    const { oauthToken } = googleSigninDto;
-    const user = await this.authentiactionService.oauthLogin(oauthToken);
-    return {
-        success: true,
-        token: user.token,
-    };
+  @Post('login')
+  async login(@Body('token') token: string) {
+    try {
+      const payload = await this.authService.verifyOAuthToken(token);
+      const user = await this.authService.validateUser(payload);
+      return this.authService.login(user);
+    } catch (error) {
+      throw new UnauthorizedException('Invalid token');
+    }
   }
-
 }
