@@ -5,12 +5,14 @@ import { AppService } from './app.service';
 import { ChatModule } from 'src/modules/chat/chat.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from '../modules/auth/auth.module';
-import { UserModule } from '../modules/user/module/user.module';
+import { UserModule } from '../modules/user/user.module';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 @Module({
   imports: [
     ChatModule,
-    MongooseModule.forRoot('mongodb://localhost/nest'), 
+    MongooseModule.forRoot(process.env.MONGO_DB_CON_STRING), 
     AuthModule,
     UserModule
   ],

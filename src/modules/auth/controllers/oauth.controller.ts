@@ -1,19 +1,20 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Post, Body, UnauthorizedException } from '@nestjs/common';
+import { Controller,Get, Post, Body } from '@nestjs/common';
 import { AuthService } from '../services/oauth.service';
+import { responseDto } from '../dtos/authentication-response.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Get()
+  test(){
+    return {success:true}
+  }
+
   @Post('login')
-  async login(@Body('token') token: string) {
-    try {
-      const payload = await this.authService.verifyOAuthToken(token);
-      const user = await this.authService.validateUser(payload);
-      return this.authService.login(user);
-    } catch (error) {
-      throw new UnauthorizedException('Invalid token');
-    }
+  async login(@Body('token') token: string): Promise<responseDto>{
+      const user = await this.authService.validateUser(token);
+      return await this.authService.login(user);
   }
 }

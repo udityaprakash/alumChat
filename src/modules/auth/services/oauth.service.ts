@@ -3,7 +3,10 @@ import { OAuth2Client } from 'google-auth-library';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../../user/services/user.service';
-import { User } from '../../user/module/user.schema';
+import { User } from '../../user/entity/user.schema';
+import { OAuthProviderEnum } from '../enums/oauth-provider.enum';
+import { responseDto } from '../dtos/authentication-response.dto';
+import { JwtPayload } from '../interfaces/jwtpayload.interface';
 
 
 @Injectable()
@@ -17,29 +20,26 @@ export class AuthService {
         this.client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
     }
 
-    async verifyOAuthToken(token: string): Promise<any> {
-        // Simulate token verification
-        // Replace with actual verification with the OAuth provider
-        if (token !== 'valid-token') {
-          throw new UnauthorizedException('Invalid OAuth token');
-        }
-        // Simulate payload from OAuth provider
+    async verifyOAuthToken(token: string): Promise<JwtPayload> {
+      try {
+        const response = await this.client.getTokenInfo(token);
         return {
-          email: 'user@example.com',
-          name: 'John Doe',
-          oauthProvider: 'google',
-          oauthId: '1234567890',
+          email: response.email,
+          oauthId: response.sub,
         };
+      } catch (error) {
+        throw new UnauthorizedException('Exception Caught in Google token '+ error);
+      }
       }
     
-      async validateUser(payload: any): Promise<User> {
+      async validateUser(token: string): Promise<User> {
+        const payload = await this.verifyOAuthToken(token);
         let user = await this.userService.findByOAuthId(payload.oauthId);
     
         if (!user) {
           user = await this.userService.create({
             email: payload.email,
-            name: payload.name,
-            oauthProvider: payload.oauthProvider,
+            oauthProvider: OAuthProviderEnum.GOOGLE,
             oauthId: payload.oauthId,
           });
         }
@@ -47,9 +47,10 @@ export class AuthService {
         return user;
       }
     
-      async login(user: User): Promise<{ accessToken: string }> {
-        const payload = { email: user.email, sub: user._id };
+      async login(user: User): Promise<responseDto> {
+        const payload = { email: user.email, oauthId: user.oauthId };
         return {
+          success: true,
           accessToken: this.jwtService.sign(payload),
         };
       }
