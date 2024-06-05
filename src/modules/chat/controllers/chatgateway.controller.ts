@@ -31,11 +31,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect{
 
   @UseGuards(JwtWsGuard)
   @SubscribeMessage('message')
-  handleMessage(@MessageBody() messageDto: MessageDto): void {
+  handleMessage(@MessageBody() messageDto: MessageDto, @ConnectedSocket() client: Socket): void {
 
-    const newMessage = this.chatService.createMessage(messageDto);
+    const newMessage = this.chatService.createMessage(client, messageDto);
     const receiverSocketId = this.chatService.getSocketId(messageDto.receiverId);
-    const senderSocketId = this.chatService.getSocketId(messageDto.senderId);
+    const senderSocketId = this.chatService.getSocketId(client.handshake.headers['user']['oauthId']);
 
     if (receiverSocketId) {
       this.server.to(receiverSocketId).emit('message', newMessage);

@@ -18,11 +18,9 @@ export class JwtWsGuard extends AuthGuard('jwt') {
       throw new UnauthorizedException('Autherization token is missing');
     }
     try {
-        console.log( 'authToken', authToken)
         const payload = await this.jwtService.verifyAsync(authToken, {
           secret: '4567',
         });
-        console.log('payload',payload)
         client.handshake.headers['user'] = payload;
       } catch(err) {
         console.log('error', err)
