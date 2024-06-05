@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import {Message} from '../interfaces/chatmessage.interface';
+import { Message } from '../interfaces/chatmessage.interface';
 import { MessageDto } from '../dtos/message.dto';
 import { MessageSeenDto } from '../dtos/messageSeen.dto';
 import { v4 as uuidv4 } from 'uuid';
+import { Socket } from 'socket.io';
 
 @Injectable()
 export class ChatService {
@@ -34,11 +35,11 @@ export class ChatService {
     return this.messages.find((msg) => msg.id === id);
   }
 
-  createMessage(messageDto: MessageDto): Message {
-    const {senderId , receiverId , message} = messageDto;
+  createMessage(client: Socket, messageDto: MessageDto): Message {
+    const { receiverId, message } = messageDto;
     const newMessage: Message = {
       id: uuidv4(),
-      senderId: senderId,
+      senderId: client.handshake.headers['user']['oauthId'],
       receiverId: receiverId,
       message: message,
       timestamp: new Date(),
@@ -48,9 +49,11 @@ export class ChatService {
     return newMessage;
   }
 
-  markMessageAsSeen(messageSeenDto : MessageSeenDto ): Message {
-    const {messageId, receiverId} = messageSeenDto;
-    const message = this.messages.find((msg) => msg.id === messageId && msg.senderId === receiverId);
+  markMessageAsSeen(messageSeenDto: MessageSeenDto): Message {
+    const { messageId, receiverId } = messageSeenDto;
+    const message = this.messages.find(
+      (msg) => msg.id === messageId && msg.senderId === receiverId,
+    );
     if (message) {
       message.seen = true;
     }
