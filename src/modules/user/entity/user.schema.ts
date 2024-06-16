@@ -1,11 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Schema, Document } from 'mongoose';
-
-export interface User extends Document {
-  email: string;
-  oauthProvider: string;
-  oauthId: string;
-}
+import { Schema } from 'mongoose';
 
 export const UserSchema = new Schema({
   email: { type: String, required: true, unique: true },

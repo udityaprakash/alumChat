@@ -1,9 +1,9 @@
 /* eslint-disable prettier/prettier */
-import { OAuth2Client } from 'google-auth-library';
+import { LoginTicket, OAuth2Client } from 'google-auth-library';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../../user/services/user.service';
-import { User } from '../../user/entity/user.schema';
+import { User } from '../../user/interfaces/user.interface';
 import { OAuthProviderEnum } from '../enums/oauth-provider.enum';
 import { responseDto } from '../dtos/authentication-response.dto';
 import { JwtPayload } from '../interfaces/jwtpayload.interface';
@@ -22,10 +22,15 @@ export class AuthService {
 
     async verifyOAuthToken(token: string): Promise<JwtPayload> {
       try {
-        const response = await this.client.getTokenInfo(token);
+        const response : LoginTicket = await this.client.verifyIdToken({
+          idToken: token,
+          audience: process.env.GOOGLE_CLIENT_ID,
+          });
+        const payload = response.getPayload();  
         return {
-          email: response.email,
-          oauthId: response.sub,
+          email: payload.email,
+          name: payload.name,
+          oauthId: payload.sub,
         };
       } catch (error) {
         throw new UnauthorizedException('Exception Caught in Google token '+ error);
@@ -39,6 +44,7 @@ export class AuthService {
         if (!user) {
           user = await this.userService.create({
             email: payload.email,
+            name: payload.name,
             oauthProvider: OAuthProviderEnum.GOOGLE,
             oauthId: payload.oauthId,
           });
@@ -48,7 +54,7 @@ export class AuthService {
       }
     
       async login(user: User): Promise<responseDto> {
-        const payload = { email: user.email, oauthId: user.oauthId };
+        const payload = { email: user.email, name:user.name, oauthId: user.oauthId };
         return {
           success: true,
           accessToken: this.jwtService.sign(payload),

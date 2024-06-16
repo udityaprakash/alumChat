@@ -9,7 +9,6 @@ export class UserController{
     @Get(':id')
     async getUserDetails(@Param('id') id: string) {
         const data = await this.userService.findById(id);
-        console.log("here it uis"+data);
         return { errorMsg: data ? null: "No data found", success: true, data, sessionActive: true };
     }
 }
