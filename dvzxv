@@ -1,0 +1,128 @@
+[33mcommit 4f17221874539e080524605455d30ff0e546a0cd[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: udityaprakash <udityaprakash983@gmail.com>
+Date:   Wed Jun 12 01:49:01 2024 +0530
+
+    added the response handler
+
+[33mcommit 04e40df656e656a075c477fdf316d652cc2b9215[m
+Author: udityaprakash <udityaprakash983@gmail.com>
+Date:   Tue Jun 11 23:47:42 2024 +0530
+
+    added interceptor for common response handling
+
+[33mcommit b1414c7f1780c6c043d83c0f5dad8096c5890ea5[m[33m ([m[1;31morigin/main-state[m[33m, [m[1;31morigin/main[m[33m, [m[1;32mmain-state[m[33m)[m
+Merge: e8e071c 4e66ca7
+Author: Uditya Prakash <103593118+udityaprakash@users.noreply.github.com>
+Date:   Fri Jun 7 15:02:56 2024 +0530
+
+    Merge pull request #5 from udityaprakash/oauth-dev
+    
+    oauth method changed from accesstoken to idtoken
+
+[33mcommit 4e66ca7238b839a55d59f7dee1d3a54fd874f580[m[33m ([m[1;31morigin/oauth-dev[m[33m, [m[1;32moauth-dev[m[33m)[m
+Author: udityaprakash <udityaprakash983@gmail.com>
+Date:   Fri Jun 7 15:00:25 2024 +0530
+
+    oauth method changed from accesstoken to idtoken
+
+[33mcommit e8e071cdf7772b350f0f9509428f7536926caa0a[m
+Merge: 9f9fc66 91acab8
+Author: Uditya Prakash <103593118+udityaprakash@users.noreply.github.com>
+Date:   Wed Jun 5 16:08:53 2024 +0530
+
+    Merge pull request #4 from udityaprakash/oauth-dev
+    
+    deploymentserver bug removed
+
+[33mcommit 91acab8ea9eb939ebc9cb07c925846278df4bac0[m
+Author: udityaprakash <udityaprakash983@gmail.com>
+Date:   Wed Jun 5 16:07:40 2024 +0530
+
+    deploymentserver bug removed
+
+[33mcommit 9f9fc6643b669f71b78be31caba3905caa6db1df[m
+Merge: 0377d91 b5a84d9
+Author: Uditya Prakash <103593118+udityaprakash@users.noreply.github.com>
+Date:   Wed Jun 5 15:55:14 2024 +0530
+
+    Merge pull request #3 from udityaprakash/oauth-dev
+    
+    Oauth dev ready for deployment
+
+[33mcommit b5a84d9889896f9452334527c611d89328d8847b[m
+Author: udityaprakash <udityaprakash983@gmail.com>
+Date:   Wed Jun 5 15:53:31 2024 +0530
+
+    senderid removed
+
+[33mcommit 303887f17102b8a6f8e070b967267b00cae1a134[m
+Author: udityaprakash <udityaprakash983@gmail.com>
+Date:   Wed Jun 5 15:35:00 2024 +0530
+
+    ws routes protected with jwt auth
+
+[33mcommit 0377d915ead5b8c94f7263274bd972e3d08ce5fa[m
+Merge: 7ad8f0d 347612b
+Author: Uditya Prakash <103593118+udityaprakash@users.noreply.github.com>
+Date:   Wed Jun 5 09:38:37 2024 +0530
+
+    Merge pull request #2 from udityaprakash/oauth-dev
+    
+    added a secret in dotenv
+
+[33mcommit 347612b50fc327a2d0e73f39a99c875184db4a55[m
+Author: udityaprakash <udityaprakash983@gmail.com>
+Date:   Wed Jun 5 09:37:26 2024 +0530
+
+    added a secret in dotenv
+
+[33mcommit 7ad8f0da3604c0d8e466a795ebe6ca441c24c441[m
+Merge: fd89802 131a4a6
+Author: Uditya Prakash <103593118+udityaprakash@users.noreply.github.com>
+Date:   Wed Jun 5 09:34:10 2024 +0530
+
+    Merge pull request #1 from udityaprakash/oauth-dev
+    
+    Oauth dev merging
+
+[33mcommit 131a4a65a1f7c7901f61b5ede88c734b26fa4066[m
+Author: udityaprakash <udityaprakash983@gmail.com>
+Date:   Tue Jun 4 17:58:27 2024 +0530
+
+    added enums interfaces and jwt services
+
+[33mcommit a211b696c054627d9944053f3c12224f1a7bc87a[m
+Author: udityaprakash <udityaprakash983@gmail.com>
+Date:   Mon Jun 3 20:57:17 2024 +0530
+
+    created user module and entities
+
+[33mcommit 0e0acb2449885a5a5e964b5306e7f8d6fdeec515[m
+Author: udityaprakash <udityaprakash983@gmail.com>
+Date:   Sat Jun 1 19:34:15 2024 +0530
+
+    developing initial oauth login
+
+[33mcommit fd89802a1e2281c461ba828e5db06bae5699d29a[m
+Author: udityaprakash <udityaprakash983@gmail.com>
+Date:   Fri May 31 13:28:27 2024 +0530
+
+    added chating module with msg seen feature
+
+[33mcommit 18fc161144762db5beb1be13abf0c74b1517e6a4[m
+Author: udityaprakash <udityaprakash983@gmail.com>
+Date:   Fri May 31 12:30:51 2024 +0530
+
+    ready for first deploy #01
+
+[33mcommit a72ee82ced3b78b7e6dd0dbec4259ed5ccce0f09[m
+Author: udityaprakash <udityaprakash983@gmail.com>
+Date:   Fri May 31 12:21:24 2024 +0530
+
+    ready for first deploy
+
+[33mcommit 5f2f3cc6f11b8d4c8370a52adc3a885b7344cd6f[m
+Author: udityaprakash <udityaprakash983@gmail.com>
+Date:   Fri May 31 11:54:19 2024 +0530
+
+    initialized alumChat
