@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { ChatGateway } from './controllers/chatgateway.controller';
 import { ChatService } from './services/chat.service';

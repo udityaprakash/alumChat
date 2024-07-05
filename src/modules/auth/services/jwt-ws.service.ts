@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
 // src/auth/jwt-ws.guard.ts
-import { Injectable, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { Injectable, ExecutionContext } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
+import { Response } from 'express';
 
 @Injectable()
 export class JwtWsGuard extends AuthGuard('jwt') {
@@ -13,9 +14,12 @@ export class JwtWsGuard extends AuthGuard('jwt') {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const client = context.switchToWs().getClient();
+    const response = context.switchToHttp().getResponse<Response>();
     const authToken = client.handshake?.headers?.token;
     if (!authToken) {
-      throw new UnauthorizedException('Autherization token is missing');
+      // throw new UnauthorizedException('Autherization token is missing');
+      response.status(401).json({ message: 'Missing authorization header' });
+      return false;
     }
     try {
         const payload = await this.jwtService.verifyAsync(authToken, {
@@ -24,7 +28,9 @@ export class JwtWsGuard extends AuthGuard('jwt') {
         client.handshake.headers['user'] = payload;
       } catch(err) {
         console.log('error', err)
-        throw new UnauthorizedException("no auth token found");
+        // throw new UnauthorizedException("no auth token found");
+        response.status(401).json({ message: 'no JWT token Found' });
+        return false;
       }
       return true;
   }

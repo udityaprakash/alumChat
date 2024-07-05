@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { Message } from '../interfaces/chatmessage.interface';
 import { MessageDto } from '../dtos/message.dto';
