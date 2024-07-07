@@ -7,6 +7,7 @@ import { MessageSeenDto } from '../dtos/messageSeen.dto';
 import { JwtWsGuard } from '../../auth/services/jwt-ws.service';
 import { UseGuards } from '@nestjs/common';
 import { InitiateResponseDto } from '../dtos/initiateResponse.dto';
+import { CommonMessageResponseDto } from '../dtos/commonMessageResponse.dto';
 
 
 @WebSocketGateway({port:4001, namespace: 'chat' })
@@ -41,13 +42,14 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect{
     const newMessage = this.chatService.createMessage(client, messageDto);
     const receiverSocketId = this.chatService.getSocketId(messageDto.receiverId);
     const senderSocketId = this.chatService.getSocketId(client.handshake.headers['user']['oauthId']);
+    const response = new CommonMessageResponseDto(newMessage);
 
     if (receiverSocketId) {
-      this.server.to(receiverSocketId).emit('message', newMessage);
+      this.server.to(receiverSocketId).emit('message', response);
     }
 
     if (senderSocketId) {
-      this.server.to(senderSocketId).emit('message', newMessage);
+      this.server.to(senderSocketId).emit('message', response);
     }
   }
 
@@ -56,9 +58,9 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect{
   handleSeenMessage(@MessageBody() messageSeenDto: MessageSeenDto): void {
     const updatedMessage = this.chatService.markMessageAsSeen(messageSeenDto);
     const senderSocketId = this.chatService.getSocketId(updatedMessage.senderId);
-
+    const response = new CommonMessageResponseDto(updatedMessage);
     if (senderSocketId) {
-      this.server.to(senderSocketId).emit('messageSeen', updatedMessage);
+      this.server.to(senderSocketId).emit('messageSeen', response);
     }
   }
 }
