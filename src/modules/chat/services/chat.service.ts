@@ -11,7 +11,13 @@ export class ChatService {
   private messages: Message[] = [];
   private userSocketMap: { [userId: string]: string } = {};
 
-  registerSocket(userId: string, socketId: string): void {
+  registerSocket(userId: string, socketId: string, client: Socket): void {
+    if(!client.handshake.headers['user']){
+      client.emit('error',{
+        success:false,
+        errmsg:'token may be expired or missing'
+      });
+    }
     this.userSocketMap[userId] = socketId;
   }
 

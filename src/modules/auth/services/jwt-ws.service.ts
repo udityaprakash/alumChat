@@ -3,7 +3,8 @@
 import { Injectable, ExecutionContext } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
-import { Response } from 'express';
+import { WsException } from '@nestjs/websockets';
+import { JwtWsErrorDto } from 'src/modules/chat/dtos/jwtws.dto';
 
 @Injectable()
 export class JwtWsGuard extends AuthGuard('jwt') {
@@ -14,12 +15,10 @@ export class JwtWsGuard extends AuthGuard('jwt') {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const client = context.switchToWs().getClient();
-    const response = context.switchToHttp().getResponse<Response>();
     const authToken = client.handshake?.headers?.token;
     if (!authToken) {
-      // throw new UnauthorizedException('Autherization token is missing');
-      response.status(401).json({ message: 'Missing authorization header' });
-      return false;
+      client.emit('error', { message: 'Authorization token is missing' });
+      throw new WsException('Autherization token is missing');
     }
     try {
         const payload = await this.jwtService.verifyAsync(authToken, {
@@ -27,12 +26,15 @@ export class JwtWsGuard extends AuthGuard('jwt') {
         });
         client.handshake.headers['user'] = payload;
       } catch(err) {
-        console.log('error', err)
-        // throw new UnauthorizedException("no auth token found");
-        response.status(401).json({ message: 'no JWT token Found' });
-        return false;
+        const errorResponse = new JwtWsErrorDto('Invalid Token or token is expired');
+        client.emit('error', errorResponse);
+        throw new WsException("Invalid Token or token is expired");
       }
       return true;
+  }
+
+  error(): JwtWsErrorDto{
+    return 
   }
 
 //   handleRequest(err:any, user:any) {

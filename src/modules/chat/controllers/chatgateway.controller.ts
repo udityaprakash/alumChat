@@ -22,7 +22,10 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect{
   @UseGuards(JwtWsGuard)
   @SubscribeMessage('initiate')
   handleRegister(@ConnectedSocket() client: Socket): void {
-    this.chatService.registerSocket(client.handshake.headers['user']['oauthId'], client.id);
+    if(!client.handshake.headers['user']){
+      client.emit('error',)
+    }
+    this.chatService.registerSocket(client.handshake.headers['user']['oauthId'], client.id,client);
   }
 
   handleDisconnect(client: Socket): void {
