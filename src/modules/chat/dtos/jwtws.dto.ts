@@ -9,21 +9,28 @@ export class JwtWsErrorDto {
     @IsBoolean()
     jwterror: boolean = true;
 
+    @IsBoolean()
+    loginrequired: boolean;
+
     @IsString()
     jwtmessage: string;
 
-    constructor(jwtmessage: string) {
+    constructor(jwtmessage: string, loginrequired : boolean) {
         this.jwtmessage = jwtmessage;
+        this.loginrequired = loginrequired;
     }
 }
 
 export class JwtWsSuccessDto {
 
     @IsBoolean()
-    success: boolean = true;
+    success: boolean;
 
     @IsBoolean()
     jwterror: boolean = false;
+
+    @IsBoolean()
+    loginrequired: boolean = false;
 
     @IsString()
     jwtmessage: string = '';
