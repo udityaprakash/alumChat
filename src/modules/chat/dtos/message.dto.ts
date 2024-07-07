@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { IsString } from 'class-validator';
+import { JwtWsSuccessDto } from './jwtws.dto';
 
-export class MessageDto {
+export class MessageDto extends JwtWsSuccessDto {
 
     @IsString()
     receiverId: string;

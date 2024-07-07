@@ -6,6 +6,7 @@ import { MessageDto } from '../dtos/message.dto';
 import { MessageSeenDto } from '../dtos/messageSeen.dto';
 import { JwtWsGuard } from '../../auth/services/jwt-ws.service';
 import { UseGuards } from '@nestjs/common';
+import { InitiateResponseDto } from '../dtos/initiateResponse.dto';
 
 
 @WebSocketGateway({port:4001, namespace: 'chat' })
@@ -22,7 +23,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect{
   @UseGuards(JwtWsGuard)
   @SubscribeMessage('initiate')
   handleRegister(@ConnectedSocket() client: Socket): void {
+
     this.chatService.registerSocket(client.handshake.headers['user']['oauthId'], client.id);
+    const response =new InitiateResponseDto({message:'successfully initiated!'});
+    client.emit('initiate',response);
+
   }
 
   handleDisconnect(client: Socket): void {
